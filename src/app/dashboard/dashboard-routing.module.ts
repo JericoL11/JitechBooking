@@ -7,12 +7,10 @@ const routes: Routes = [
   {
     path:'', component:DashboardComponent,
     children: [
-    // {
-    //   path: 'dashboard',component:DashboardComponent, 
-    //   // redirectTo: 'dashboard',  //program start
-    //   // pathMatch: 'full'
-    // },
-    
+    {
+        path: 'timekeeping',
+        loadChildren: () => import('./timekeeping/timekeeping.module').then(m => m.TimekeepingModule)
+    },
     {
       path: 'booking',
       component:BookingComponent
