@@ -1,66 +1,10 @@
 <div class="bg-gray-800 p-4 flex items-center justify-center">
-  <!-- Left side: logo and title -->
+
    <a routerLink="/dashboard">
   <div class="flex  justify-center transform transition-all hover:scale-105">
     <img src="image/logo-white.png" class="h-10 w-30">
-      <!-- <span class="text-white ml-2 font-semibold">Jitech Booking</span> -->
   </div>
-  <!-- Right side: navigation links -->
-  <!-- <div class="flex space-x-4">
-    <a routerLink="/dashboard" class="text-gray-300 hover:text-white">Home</a>
-    <a routerLink="/dashboard/booking" class="text-gray-300 hover:text-white">Booking</a>
-    <a routerLink="/dashboard/timekeeping" class="text-gray-300 hover:text-white">Time Keeping</a>
-  </div> -->
   </a>
 </div>
-<div class="container mx-auto flex justify-center items-center">
-    <div *ngIf="isDashboard">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
-        <!-- Clients Card -->
-        <div class="bg-white shadow-md rounded-xl p-6 flex flex-col items-center text-center border border-gray-200 
-        transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg animate-fade-in">
-        <div class="bg-red-100 p-4 rounded-full mb-4">
-        🧑‍💼 <!-- Business/Customer Icon -->
-        </div>
-        <h3 class="text-lg font-semibold text-gray-700">Clients</h3>
-        <p class="text-2xl font-bold text-red-600">245 Registered</p>
-        </div>
 
-        <!-- Rooms Card -->
-        <a routerLink="/dashboard/booking" class="block">
-          <div class="bg-white shadow-md rounded-xl p-6 flex flex-col items-center text-center border border-gray-200 
-                      transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg animate-fade-in">
-            <div class="bg-green-100 p-4 rounded-full mb-4">
-              🏨 <!-- Hotel Building Icon -->
-            </div>
-            <h3 class="text-lg font-semibold text-gray-700">Rooms</h3>
-            <p class="text-2xl font-bold text-green-600">Available: 12</p>
-          </div>
-        </a>
-
-        <!-- Services Card -->
-        <div class="bg-white shadow-md rounded-xl p-6 flex flex-col items-center text-center border border-gray-200 
-                    transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg animate-fade-in cursor-pointer">
-          <div class="bg-blue-100 p-4 rounded-full mb-4">
-            💆‍♂️ <!-- Massage/Spa Icon -->
-          </div>
-          <h3 class="text-lg font-semibold text-gray-700">Services</h3>
-          <p class="text-2xl font-bold text-blue-600">5 Packages</p>
-        </div>
-
-        
-        <!-- Bookings Card -->
-        <div class="bg-white shadow-md rounded-xl p-6 flex flex-col items-center text-center border border-gray-200 
-                    transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg animate-fade-in">
-          <div class="bg-purple-100 p-4 rounded-full mb-4">
-            📅 <!-- Calendar/Booking Icon -->
-          </div>
-          <h3 class="text-lg font-semibold text-gray-700">Bookings</h3>
-          <p class="text-2xl font-bold text-purple-600">48 Confirmed</p>
-        </div>
-    </div>
-  </div>
-</div>
-
-<!-- This will load child routes (Booking, Timekeeping) -->
 <router-outlet></router-outlet>
