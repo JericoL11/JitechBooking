@@ -1,41 +1,141 @@
 <div class="container p-4 mx-auto">
   <div class="text-center mb-8">
-    <h1 class="text-4xl text-gray-900 font-extrabold my-10">Booking</h1>
+    <h1 class="text-4xl font-extrabold my-10">Booking</h1>
   </div>
   
-  <h2 class="text-center text-gray-800 text-xl font-semibold mb-4">
+  <h2 class="text-center text-xl font-semibold mb-4">
     Available Rooms for "{{ selectedRoomType }}"
   </h2>
 
-  <!-- If there are rooms, display them as cards -->
+  <!-- Room Cards -->
   <div *ngIf="rooms && rooms.length; else noRooms">
     <div class="flex flex-wrap justify-center gap-4">
-      <div *ngFor="let room of rooms" class="w-56 bg-white rounded-lg shadow-md hover:scale-105 transition">
-        <!-- Nav Bar Header for Card -->
+      <div
+        *ngFor="let room of rooms"
+        class="w-56 bg-white rounded-lg shadow-md hover:scale-105 transition cursor-pointer"
+        (click)="openModal(room)"
+      >
         <div class="rounded-t-lg px-4 py-2 text-white" [ngClass]="getRoomStatusColor(room)">
           <h3 class="text-lg font-semibold">{{ room.roomName }}</h3>
         </div>
-        <!-- Card Body -->
         <div class="p-4">
           <p class="text-gray-600 text-sm mb-1">{{ room.description }}</p>
           <p class="text-gray-600 text-sm mb-1">Price: ₱{{ room.price | number:'1.2-2' }}</p>
           <p class="text-gray-600 text-sm mb-1">Capacity: {{ room.capacity }}</p>
-          <!-- Additional details if needed -->
         </div>
       </div>
     </div>
   </div>
-
-  <!-- Fallback if no rooms are available -->
   <ng-template #noRooms>
-    <p class="text-center text-gray-500">
-      No rooms available for the selected type.
-    </p>
+    <p class="text-center text-gray-500">No rooms available for the selected type.</p>
   </ng-template>
-
+  
   <div class="text-center my-10">
-    <a routerLink="/dashboard/booking" class="px-6 py-2 bg bg-gray-500 text-white rounded-lg hover:bg-600 transition duration-300">
+    <a routerLink="/dashboard/booking" class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-300">
       Back
     </a>
+  </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="isModalOpen" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+  <div class="bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 p-6 relative">
+    <button class="absolute top-2 right-2 text-gray-700" (click)="closeModal()">&#10005;</button>
+    
+    <!-- Booking Form (if room is available) -->
+    <div *ngIf="selectedRoom?.isAvailable; else bookedInfo">
+      <h2 class="text-2xl font-bold mb-4">Book Room: {{ selectedRoom?.roomName }}</h2>
+      <form [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
+        <!-- Customer Info -->
+        <div class="mb-4">
+          <label for="fname" class="block text-gray-700">First Name</label>
+          <input id="fname" formControlName="fname" class="w-full border rounded p-2" type="text" placeholder="Enter your first name">
+        </div>
+        <div class="mb-4">
+          <label for="lname" class="block text-gray-700">Last Name</label>
+          <input id="lname" formControlName="lname" class="w-full border rounded p-2" type="text" placeholder="Enter your last name">
+        </div>
+        <!-- Dates -->
+        <div class="mb-4">
+          <label for="checkInDate" class="block text-gray-700">Check-In Date</label>
+          <input id="checkInDate" formControlName="checkInDate" class="w-full border rounded p-2" type="date">
+        </div>
+        <div class="mb-4">
+          <label for="checkOutDate" class="block text-gray-700">Check-Out Date</label>
+          <input id="checkOutDate" formControlName="checkOutDate" class="w-full border rounded p-2" type="date">
+        </div>
+        <!-- Add‑Ons Selection -->
+        <div class="mb-4">
+          <h3 class="text-lg font-semibold mb-2">Select Add‑Ons</h3>
+          <div *ngIf="availableAddons && availableAddons.length; else noAddons">
+            <div *ngFor="let addon of availableAddons" class="flex items-center mb-2">
+              <label class="flex items-center">
+                <input type="checkbox" (change)="onAddonChange($event, addon)" class="mr-2">
+                {{ addon.name }} - ₱{{ addon.price }}
+              </label>
+              <!-- Show quantity input if addon is selected -->
+              <input type="number" min="1" class="ml-4 w-16 border rounded p-1"
+                     *ngIf="isAddonSelected(addon._id)"
+                     [value]="getAddonQuantity(addon._id)"
+                     (change)="onAddonQuantityChange($event, addon)">
+            </div>
+          </div>
+          <ng-template #noAddons>
+            <p>No add‑ons available.</p>
+          </ng-template>
+        </div>
+        <!-- Submit Booking -->
+        <div class="text-right">
+          <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+            Submit Booking
+          </button>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Booking Details (if room is not available) -->
+    <ng-template #bookedInfo>
+      <h2 class="text-2xl font-bold mb-4">Room: {{ selectedRoom?.roomName }} is Booked</h2>
+      <div *ngIf="selectedBooking === undefined; else bookingOrNoBooking">
+        <p>Loading booking details...</p>
+      </div>
+      <ng-template #bookingOrNoBooking>
+        <div *ngIf="selectedBooking; else noBooking">
+          <!-- Display booking details -->
+          <p class="mb-2"><strong>Booked By:</strong> {{ selectedBooking.customer.fname }} {{ selectedBooking.customer.lname }}</p>
+          <p class="mb-2"><strong>Check-In:</strong> {{ selectedBooking.checkInDate | date }}</p>
+          <p class="mb-2"><strong>Check-Out:</strong> {{ selectedBooking.checkOutDate | date }}</p>
+          <p class="mb-2"><strong>Grand Total:</strong> ₱{{ selectedBooking.grandTotal | number:'1.2-2' }}</p>
+          <div *ngIf="selectedBooking.addons && selectedBooking.addons.length; else noAddonsSelected">
+            <h3 class="mt-4 font-semibold">Add‑Ons:</h3>
+            <ul class="list-disc list-inside">
+              <li *ngFor="let addon of selectedBooking.addons">
+                {{ addon.addonItem.name }} (Quantity: {{ addon.quantity }})
+              </li>
+            </ul>
+          </div>
+          <ng-template #noAddonsSelected>
+            <p>No add‑ons selected.</p>
+          </ng-template>
+    
+          <!-- Action Buttons -->
+          <div class="mt-4 flex justify-around">
+            <!-- Cancel Booking Button -->
+            <button (click)="updateBookingStatus('cancelled')"
+                    class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">
+              Cancel Booking
+            </button>
+            <!-- Complete Booking Button -->
+            <button (click)="updateBookingStatus('completed')"
+                    class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition">
+              Complete Booking
+            </button>
+          </div>
+        </div>
+        <ng-template #noBooking>
+          <p>No active or upcoming booking for this room.</p>
+        </ng-template>
+      </ng-template>
+    </ng-template>
   </div>
 </div>

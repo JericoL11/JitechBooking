@@ -1,30 +1,23 @@
 <div class="lg:px-8 max-w-7xl mx-auto my-10 px-4 sm:px-6">
-  <!-- Header -->
   <div class="text-center">
     <h1 class="text-4xl text-grey-900e font-extrabold">Room List</h1>
   </div>
-  <!-- Back Button, Search & Add Room -->
   <div class="flex justify-between mb-4">
-    <!-- Back Button (remains intact) -->
     <a routerLink="/dashboard/maintenance" class="btn-cancel">Back</a>
     <div class="flex space-x-4">
-      <!-- Search Input -->
       <input
         type="text"
         placeholder="Search room name"
         [(ngModel)]="searchQuery"
         class="border rounded-md focus:border-blue-500 focus:outline-none px-3 py-2"
       />
-      <!-- Add Room Button -->
       <button (click)="openModal('add')" type="button" class="btn-primary">
         Add Room
       </button>
     </div>
   </div>
 
-  <!-- Content Container: Table/No Data and Pagination -->
   <div class="flex flex-col min-h-[300px]">
-    <!-- Table / No Data -->
     <div class="flex-grow">
       <ng-container *ngIf="pagedRooms.length > 0; else noRooms">
         <div class="overflow-x-auto">
@@ -81,7 +74,6 @@
       </ng-template>
     </div>
 
-    <!-- Pagination Controls fixed at the bottom -->
     <div class="flex justify-center items-center mt-auto py-4 space-x-4">
       <button (click)="prevPage()" [disabled]="currentPage === 1" class="btn-primary">
         Prev
@@ -94,12 +86,10 @@
   </div>
 </div>
 
-<!-- Modal for Add/Edit Room -->
 <div class="flex justify-center backdrop-blur-[1px] fixed inset-0 items-center z-50" *ngIf="isModalOpen">
   <div
     class="bg-white rounded-xl shadow-2xl w-full max-w-lg mx-4 relative transform transition-all"
-    (click)="$event.stopPropagation()"
-  >
+    (click)="$event.stopPropagation()">
     <form [formGroup]="roomForm" (ngSubmit)="saveRoom()">
       <div class="border-b p-6">
         <h3 class="text-2xl text-gray-800 font-bold">
@@ -130,7 +120,7 @@
 
         <!-- Room Name -->
         <div>
-          <label for="roomName" class="text-gray-700 text-sm block font-medium">Room Name</label>
+          <label class="text-gray-700 text-sm block font-medium">Room Name</label>
           <input
             id="roomName"
             type="text"

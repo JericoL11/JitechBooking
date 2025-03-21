@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { BookingComponent } from './booking/booking.component';
 import { DashboardLandingComponent } from './dashboard-landing/dashboard-landing.component';
-import { BookingdashboardComponent } from './bookingdashboard/bookingdashboard.component';
 import { BookingRoomsComponent } from './booking-rooms/booking-rooms.component';
 
 const routes: Routes = [

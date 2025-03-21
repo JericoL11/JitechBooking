@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { Room, RoomService } from '../../Services/Room/room.service';
 import { Booking, BookingService } from '../../Services/Booking/booking.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';

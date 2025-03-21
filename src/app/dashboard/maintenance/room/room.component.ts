@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule,        // for [(ngModel)] usage
+    FormsModule,        
     FontAwesomeModule,
     RouterModule
   ],
@@ -24,7 +24,7 @@ import { FormsModule } from '@angular/forms';
 export class RoomComponent implements OnInit {
 
   // Room display properties
-  rooms: Room[] = []; // full list of rooms from backend
+  rooms: Room[] = []; 
   errorMessage: string = '';
 
   // Modal and form properties
@@ -55,7 +55,7 @@ export class RoomComponent implements OnInit {
   // Search & Pagination
   searchQuery: string = '';
   currentPage: number = 1;
-  pageSize: number = 5; // Adjust as needed
+  pageSize: number = 5; 
 
   constructor(
     private roomService: RoomService,
@@ -72,7 +72,7 @@ export class RoomComponent implements OnInit {
   // Set up the reactive form
   initializeRoomForm(): void {
     this.roomForm = this.fb.group({
-      roomName: ['', Validators.required],
+      roomName: ['room', Validators.required],
       price: ['', [Validators.required, Validators.min(0)]],
       roomType: ['', Validators.required],
       capacity: [0, [Validators.required, Validators.min(0)]],
@@ -101,9 +101,7 @@ export class RoomComponent implements OnInit {
     });
   }
 
-  // ======================
-  //    SEARCH & PAGING
-  // ======================
+
   get filteredRooms(): Room[] {
     if (!this.searchQuery) {
       return this.rooms;
@@ -134,9 +132,6 @@ export class RoomComponent implements OnInit {
     return Math.ceil(this.filteredRooms.length / this.pageSize);
   }
 
-  // ======================
-  //      ROOM LOGIC
-  // ======================
   openModal(mode: 'add' | 'edit', room?: Room): void {
     this.modalMode = mode;
     this.isModalOpen = true;
@@ -203,20 +198,14 @@ export class RoomComponent implements OnInit {
     }
   }
 
-  // ======================
   // HELPER FUNCTION
-  // ======================
-  /**
-   * Safely get the category name for a room.
-   * This avoids arrow functions in the template and prevents parser errors.
-   */
   getCategoryName(room: Room): string {
     if (!room.roomType) return '';
-    // If it's already an object, return the categoryName
+
     if (typeof room.roomType === 'object') {
       return room.roomType.categoryName || '';
     }
-    // Otherwise, it's a string ID
+ 
     const category = this.roomCategory.find((cat) => cat._id === room.roomType);
     return category ? category.categoryName : '';
   }

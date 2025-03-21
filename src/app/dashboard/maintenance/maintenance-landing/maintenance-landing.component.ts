@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faBed, faBowlFood, faHotel, faHouse, faList, faShirt, faToilet, faToiletPaper } from '@fortawesome/free-solid-svg-icons';
+import { faBed, faBowlFood, faHotel, faList, faToiletPaper } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-maintenance-landing',
