@@ -1,0 +1,111 @@
+<div class="lg:px-8 max-w-7xl mx-auto my-10 px-4 sm:px-6">
+  <!-- Header -->
+  <div class="text-center">
+    <h1 class="text-4xl text-grey-900e font-extrabold">Room Category</h1>
+  </div>
+
+  <!-- Back Button, Search & Add Category -->
+  <div class="flex justify-between mb-3">
+    <a routerLink="/dashboard/maintenance" class="btn-cancel">Back</a>
+    <div class="flex space-x-4">
+      <!-- Search Input -->
+      <input
+        type="text"
+        placeholder="Search category name"
+        [(ngModel)]="searchQuery"
+        class="border rounded-md focus:border-blue-500 focus:outline-none px-3 py-2"
+      />
+      <!-- Add Category Button -->
+      <button (click)="OpenModal('add')" type="button" class="btn-primary">
+        Add Category
+      </button>
+    </div>
+  </div>
+
+  <!-- Content Container: Table/No Data and Pagination -->
+  <div class="flex flex-col min-h-[200px]">
+    <!-- Table or No Data Message -->
+    <div class="flex-grow">
+      <ng-container *ngIf="pagedCategories.length > 0; else noData">
+        <div class="overflow-x-auto">
+          <table class="bg-white border-gray-200 rounded-lg shadow min-w-full">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="border-b px-6 py-3">No.</th>
+                <th class="border-b px-6 py-3">Category Name</th>
+                <th class="border-b px-6 py-3">Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-gray-200 divide-y">
+              <tr *ngFor="let category of pagedCategories; let i = index">
+                <td class="text-gray-700 text-sm px-6 py-4">
+                  {{ (currentPage - 1) * pageSize + i + 1 }}
+                </td>
+                <td class="text-gray-700 text-sm px-6 py-4">{{ category.categoryName }}</td>
+                <td class="px-6 py-4 space-x-2">
+                  <button
+                    (click)="OpenModal('edit', category)"
+                    class="bg-green-500 p-2 rounded-full shadow text-white hover:bg-green-600 inline-flex items-center transition-colors"
+                  >
+                    <fa-icon [icon]="editIcon" class="text-sm"></fa-icon>
+                  </button>
+                  <!-- Uncomment below to enable delete -->
+                  <!-- <button (click)="deleteCategory(category._id)" class="btn-delete">Delete</button> -->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
+      <ng-template #noData>
+        <p class="text-center text-gray-500 mt-6">No categories available.</p>
+      </ng-template>
+    </div>
+
+    <!-- Pagination Controls (Fixed at Bottom) -->
+    <div class="flex justify-center items-center mt-auto py-4 space-x-4">
+      <button (click)="prevPage()" [disabled]="currentPage === 1" class="btn-primary">
+        Prev
+      </button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="btn-primary">
+        Next
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Add/Edit Category -->
+<div class="flex justify-center backdrop-blur-[1px] fixed inset-0 items-center z-50" *ngIf="isModalOpen">
+  <div class="bg-white rounded-xl shadow-2xl w-full duration-300 max-w-lg mx-4 relative transform transition-all" (click)="$event.stopPropagation()">
+    <form [formGroup]="categoryForm" (ngSubmit)="save()">
+      <div class="border-b p-6">
+        <h3 class="text-2xl text-gray-800 font-bold">
+          {{ modalMode === 'edit' ? 'Edit Category' : 'Add Category' }}
+        </h3>
+        <p class="text-gray-600 text-sm mt-2">Fill out the details below.</p>
+      </div>
+      <div *ngIf="errorMessage" class="text-red-600 px-6 py-2">
+        {{ errorMessage }}
+      </div>
+      <div class="px-6 py-4 space-y-4">
+        <div>
+          <label class="text-gray-700 text-sm block font-medium">Category Name</label>
+          <input id="categoryName"
+                 type="text"
+                 formControlName="categoryName"
+                 placeholder="Enter category name"
+                 class="border-gray-300 p-2 rounded-md shadow-sm w-full block focus:border-blue-500 focus:ring-blue-500 mt-1">
+        </div>
+      </div>
+      <div class="flex border-t justify-end px-6 py-4 space-x-3">
+        <button type="submit" class="btn-primary">
+          {{ modalMode === 'edit' ? 'Update' : 'Create' }}
+        </button>
+        <button type="button" (click)="closeModal()" class="btn-cancel">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

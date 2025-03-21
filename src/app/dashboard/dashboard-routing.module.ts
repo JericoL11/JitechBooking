@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { BookingComponent } from './booking/booking.component';
 import { DashboardLandingComponent } from './dashboard-landing/dashboard-landing.component';
-import { RoomComponent } from './room/room.component';
 import { BookingdashboardComponent } from './bookingdashboard/bookingdashboard.component';
+import { BookingRoomsComponent } from './booking-rooms/booking-rooms.component';
 
 const routes: Routes = [
   {
@@ -21,18 +21,13 @@ const routes: Routes = [
         component: BookingComponent
       },
       {
-        path: 'room',
-        component: RoomComponent
-      },
-
-      {
-        path: 'bookingdashboard',
-        component:BookingdashboardComponent
+        path: 'booking-rooms',
+        component: BookingRoomsComponent
       },
       {
-        path: 'timekeeping',
-        loadChildren: () => import('./timekeeping/timekeeping.module').then(m => m.TimekeepingModule)
-      }
+        path: 'maintenance',
+        loadChildren: () => import('./maintenance/maintenance-routing.module').then(m => m.MaintenanceRoutingModule)
+      },
     ]
   }
 ];

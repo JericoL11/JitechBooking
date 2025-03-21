@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TimekeepingRoutingModule } from './timekeeping-routing.module';
+import { MaintenanceRoutingModule } from './maintenance-routing.module';
 
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    TimekeepingRoutingModule
+    MaintenanceRoutingModule
   ]
 })
-export class TimekeepingModule { }
+export class MaintenanceModule { }

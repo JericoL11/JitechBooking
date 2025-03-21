@@ -1,0 +1,42 @@
+<div class="container p-4 mx-auto my-10">
+  <h1 class="text-4xl text-center text-gray-900 font-extrabold mb-10">Maintenance</h1>
+
+  <!-- LIMIT the flex container’s max‑width to exactly 3 cards + 2 gaps -->
+  <div class="flex flex-wrap justify-center gap-6 max-w-[45rem] mx-auto">
+    <a routerLink="/dashboard/maintenance/room" class="flex-none w-56">
+      <div class="flex flex-col bg-white border border-gray-200 p-6 rounded-xl shadow-md text-center duration-300 hover:scale-105 hover:shadow-lg items-center transition-transform">
+        <div class="bg-green-100 p-4 rounded-full mb-4">
+          <fa-icon [icon]="bedIcon" class="text-3xl text-blue-500"></fa-icon>
+        </div>
+        <h3 class="text-gray-700 text-lg font-semibold">Rooms</h3>
+      </div>
+    </a>
+
+    <a routerLink="/dashboard/maintenance/food" class="flex-none w-56">
+      <div class="flex flex-col bg-white border border-gray-200 p-6 rounded-xl shadow-md text-center duration-300 hover:scale-105 hover:shadow-lg items-center transition-transform">
+        <div class="bg-green-100 p-4 rounded-full mb-4">
+          <fa-icon [icon]="foodIcon" class="text-3xl text-blue-500"></fa-icon>
+        </div>
+        <h3 class="text-gray-700 text-lg font-semibold">Foods</h3>
+      </div>
+    </a>
+
+    <a routerLink="/dashboard/maintenance/items" class="flex-none w-56">
+      <div class="flex flex-col bg-white border border-gray-200 p-6 rounded-xl shadow-md text-center duration-300 hover:scale-105 hover:shadow-lg items-center transition-transform">
+        <div class="bg-green-100 p-4 rounded-full mb-4">
+          <fa-icon [icon]="houseKeeping" class="text-3xl text-blue-500"></fa-icon>
+        </div>
+        <h3 class="text-gray-700 text-lg font-semibold">Items</h3>
+      </div>
+    </a>
+
+    <a routerLink="/dashboard/maintenance/roomcategory" class="flex-none w-56">
+      <div class="flex flex-col bg-white border border-gray-200 p-6 rounded-xl shadow-md text-center duration-300 hover:scale-105 hover:shadow-lg items-center transition-transform">
+        <div class="bg-green-100 p-4 rounded-full mb-4">
+          <fa-icon [icon]="category" class="text-3xl text-blue-500"></fa-icon>
+        </div>
+        <h3 class="text-gray-700 text-lg font-semibold">Room Category</h3>
+      </div>
+    </a>
+  </div>
+</div>

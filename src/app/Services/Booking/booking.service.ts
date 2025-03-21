@@ -11,7 +11,7 @@ export interface Booking {
   checkInDate: Date;
   checkOutDate: Date;
   guests?: number;
-  roomType?: 'Standard' | 'Deluxe' | 'Family' | 'Suite';
+  roomType?: string;
   grandTotal?: number;
   status?: string;
   description?: string;

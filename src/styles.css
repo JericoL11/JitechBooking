@@ -1,4 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+/* custom classes for tailwind */
+.btn-primary {
+    @apply px-6 py-2 font-semibold text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 transition;
+  }
+
+  .btn-cancel {
+    @apply px-6 py-2 bg-gray-500 text-white rounded-md shadow hover:bg-gray-600 transition duration-300;
+  }
+
+  th{
+   @apply px-6 py-3 border-b text-left text-sm font-medium text-gray-600
+  }

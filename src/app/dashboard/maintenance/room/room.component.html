@@ -1,0 +1,212 @@
+<div class="lg:px-8 max-w-7xl mx-auto my-10 px-4 sm:px-6">
+  <!-- Header -->
+  <div class="text-center">
+    <h1 class="text-4xl text-grey-900e font-extrabold">Room List</h1>
+  </div>
+  <!-- Back Button, Search & Add Room -->
+  <div class="flex justify-between mb-4">
+    <!-- Back Button (remains intact) -->
+    <a routerLink="/dashboard/maintenance" class="btn-cancel">Back</a>
+    <div class="flex space-x-4">
+      <!-- Search Input -->
+      <input
+        type="text"
+        placeholder="Search room name"
+        [(ngModel)]="searchQuery"
+        class="border rounded-md focus:border-blue-500 focus:outline-none px-3 py-2"
+      />
+      <!-- Add Room Button -->
+      <button (click)="openModal('add')" type="button" class="btn-primary">
+        Add Room
+      </button>
+    </div>
+  </div>
+
+  <!-- Content Container: Table/No Data and Pagination -->
+  <div class="flex flex-col min-h-[300px]">
+    <!-- Table / No Data -->
+    <div class="flex-grow">
+      <ng-container *ngIf="pagedRooms.length > 0; else noRooms">
+        <div class="overflow-x-auto">
+          <table class="bg-white border border-gray-200 rounded-lg shadow min-w-full">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="border-b text-gray-600 text-left text-sm font-medium px-6 py-3">
+                  No.
+                </th>
+                <th class="border-b text-gray-600 text-left text-sm font-medium px-6 py-3">
+                  Name
+                </th>
+                <th class="border-b text-gray-600 text-left text-sm font-medium px-6 py-3">
+                  Price
+                </th>
+                <th class="border-b text-gray-600 text-left text-sm font-medium px-6 py-3">
+                  Type
+                </th>
+                <th class="border-b text-gray-600 text-left text-sm font-medium px-6 py-3">
+                  Capacity
+                </th>
+                <th class="border-b text-gray-600 text-left text-sm font-medium px-6 py-3">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-gray-200 divide-y">
+              <tr *ngFor="let room of pagedRooms; let i = index" class="hover:bg-gray-50">
+                <td class="text-gray-700 text-sm px-6 py-4">
+                  {{ (currentPage - 1) * pageSize + i + 1 }}
+                </td>
+                <td class="text-gray-700 text-sm px-6 py-4">{{ room.roomName }}</td>
+                <td class="text-gray-700 text-sm px-6 py-4">{{ room.price }}</td>
+                <td class="text-gray-700 text-sm px-6 py-4">
+                  {{ getCategoryName(room) }}
+                </td>
+                <td class="text-gray-700 text-sm px-6 py-4">{{ room.capacity }}</td>
+                <td class="px-6 py-4">
+                  <button
+                    type="button"
+                    (click)="openModal('edit', room)"
+                    class="bg-green-500 p-2 rounded-full shadow text-white hover:bg-green-600 inline-flex items-center"
+                  >
+                    <fa-icon [icon]="editIcon" class="text-sm"></fa-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
+      <ng-template #noRooms>
+        <p class="text-center text-gray-500 mt-6">No rooms available.</p>
+      </ng-template>
+    </div>
+
+    <!-- Pagination Controls fixed at the bottom -->
+    <div class="flex justify-center items-center mt-auto py-4 space-x-4">
+      <button (click)="prevPage()" [disabled]="currentPage === 1" class="btn-primary">
+        Prev
+      </button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="btn-primary">
+        Next
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Add/Edit Room -->
+<div class="flex justify-center backdrop-blur-[1px] fixed inset-0 items-center z-50" *ngIf="isModalOpen">
+  <div
+    class="bg-white rounded-xl shadow-2xl w-full max-w-lg mx-4 relative transform transition-all"
+    (click)="$event.stopPropagation()"
+  >
+    <form [formGroup]="roomForm" (ngSubmit)="saveRoom()">
+      <div class="border-b p-6">
+        <h3 class="text-2xl text-gray-800 font-bold">
+          {{ modalMode === 'edit' ? 'Edit Room' : 'Add Room' }}
+        </h3>
+        <p class="text-gray-600 text-sm mt-2">Fill out the details below.</p>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="text-red-600 px-6 py-2">
+        {{ errorMessage }}
+      </div>
+
+      <div class="px-6 py-4 space-y-4">
+        <!-- Room Type -->
+        <div>
+          <label for="roomType" class="text-gray-700 text-sm block font-medium">Room Type</label>
+          <select
+            id="roomType"
+            formControlName="roomType"
+            class="border-gray-300 rounded-md shadow-sm w-full block focus:border-blue-500 focus:ring-blue-500 mt-1"
+          >
+            <option *ngFor="let types of roomCategory" [value]="types._id">
+              {{ types.categoryName }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Room Name -->
+        <div>
+          <label for="roomName" class="text-gray-700 text-sm block font-medium">Room Name</label>
+          <input
+            id="roomName"
+            type="text"
+            formControlName="roomName"
+            placeholder="Enter room name"
+            class="border-gray-300 rounded-md shadow-sm w-full block focus:border-blue-500 focus:ring-blue-500 mt-1"
+          />
+        </div>
+
+        <!-- Price -->
+        <div>
+          <label for="price" class="text-gray-700 text-sm block font-medium">Price</label>
+          <input
+            id="price"
+            type="number"
+            formControlName="price"
+            placeholder="Enter price"
+            class="border-gray-300 rounded-md shadow-sm w-full block focus:border-blue-500 focus:ring-blue-500 mt-1"
+          />
+        </div>
+
+        <!-- Excess Charge -->
+        <!-- <div>
+          <label for="excessPerhead" class="text-gray-700 text-sm block font-medium">Excess Charge</label>
+          <input
+            id="excessPerhead"
+            type="number"
+            formControlName="excessPerhead"
+            placeholder="Enter excess amount"
+            class="border-gray-300 rounded-md shadow-sm w-full block focus:border-blue-500 focus:ring-blue-500 mt-1"
+          />
+        </div> -->
+
+        <!-- Capacity -->
+        <div>
+          <label for="capacity" class="text-gray-700 text-sm block font-medium">Capacity</label>
+          <input
+            id="capacity"
+            type="number"
+            formControlName="capacity"
+            placeholder="Enter capacity"
+            class="border-gray-300 rounded-md shadow-sm w-full block focus:border-blue-500 focus:ring-blue-500 mt-1"
+          />
+        </div>
+
+        <!-- Active Checkbox -->
+        <div class="flex items-center">
+          <input
+            id="isActive"
+            type="checkbox"
+            formControlName="isActive"
+            class="border-gray-300 h-4 rounded text-blue-600 w-4 focus:ring-blue-500"
+          />
+          <label for="isActive" class="text-gray-700 text-sm block ml-2">Active</label>
+        </div>
+
+        <!-- Available Checkbox -->
+        <div class="flex items-center">
+          <input
+            id="isAvailable"
+            type="checkbox"
+            formControlName="isAvailable"
+            class="border-gray-300 h-4 rounded text-blue-600 w-4 focus:ring-blue-500"
+          />
+          <label for="isAvailable" class="text-gray-700 text-sm block ml-2">Available</label>
+        </div>
+      </div>
+
+      <div class="flex border-t justify-end px-6 py-4 space-x-3">
+        <button type="submit" class="btn-primary">
+          {{ modalMode === 'edit' ? 'Update' : 'Create' }}
+        </button>
+        <button type="button" (click)="closeModal()" class="btn-cancel">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

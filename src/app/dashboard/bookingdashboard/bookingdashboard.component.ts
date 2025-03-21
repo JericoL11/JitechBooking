@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BookingService, Booking } from '../../Services/Booking/booking.service';
 import { RoomService } from '../../Services/Room/room.service';
-import { CustomerService } from '../../Services/Customer/customer.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -35,7 +34,6 @@ export class BookingdashboardComponent implements OnInit {
   constructor(
     private bookingService: BookingService,
     private roomService: RoomService,
-    private customerService: CustomerService,
     private fb: FormBuilder,
     private router: Router
   ) {}

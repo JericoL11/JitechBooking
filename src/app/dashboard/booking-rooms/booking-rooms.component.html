@@ -1,0 +1,41 @@
+<div class="container p-4 mx-auto">
+  <div class="text-center mb-8">
+    <h1 class="text-4xl text-gray-900 font-extrabold my-10">Booking</h1>
+  </div>
+  
+  <h2 class="text-center text-gray-800 text-xl font-semibold mb-4">
+    Available Rooms for "{{ selectedRoomType }}"
+  </h2>
+
+  <!-- If there are rooms, display them as cards -->
+  <div *ngIf="rooms && rooms.length; else noRooms">
+    <div class="flex flex-wrap justify-center gap-4">
+      <div *ngFor="let room of rooms" class="w-56 bg-white rounded-lg shadow-md hover:scale-105 transition">
+        <!-- Nav Bar Header for Card -->
+        <div class="rounded-t-lg px-4 py-2 text-white" [ngClass]="getRoomStatusColor(room)">
+          <h3 class="text-lg font-semibold">{{ room.roomName }}</h3>
+        </div>
+        <!-- Card Body -->
+        <div class="p-4">
+          <p class="text-gray-600 text-sm mb-1">{{ room.description }}</p>
+          <p class="text-gray-600 text-sm mb-1">Price: ₱{{ room.price | number:'1.2-2' }}</p>
+          <p class="text-gray-600 text-sm mb-1">Capacity: {{ room.capacity }}</p>
+          <!-- Additional details if needed -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fallback if no rooms are available -->
+  <ng-template #noRooms>
+    <p class="text-center text-gray-500">
+      No rooms available for the selected type.
+    </p>
+  </ng-template>
+
+  <div class="text-center my-10">
+    <a routerLink="/dashboard/booking" class="px-6 py-2 bg bg-gray-500 text-white rounded-lg hover:bg-600 transition duration-300">
+      Back
+    </a>
+  </div>
+</div>

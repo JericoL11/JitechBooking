@@ -4,17 +4,23 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 
 //model
+export interface RoomCategory {
+  _id: string;
+  categoryName: string;
+}
+
 export interface Room {
   _id: string;
   roomName: string;
+  description: string;
   price: number;
-  roomType: 'Standard' | 'Deluxe' | 'Suite' | 'Family';
+  roomType: string | RoomCategory;   // ← allow both
   capacity: number;
   isActive: boolean;
   excessPerhead: number;
   isAvailable: boolean;
-  
 }
+
 
 @Injectable({
   providedIn: 'root'
@@ -43,9 +49,12 @@ export class RoomService {
     return this.http.delete<void>(`${this.apiUrl}/${_id}`);
   }
   
-  getRoomById(_id: string): Observable<Room> {
-    return this.http.get<Room>(`${this.apiUrl}/${_id}`);
+
+  // Get rooms by type (e.g., filtering by a category id or string)
+  getRoomsByType(roomType: string): Observable<Room[]> {
+    return this.http.get<Room[]>(`${this.apiUrl}?roomType=${roomType}`);
   }
+  
   
   
 }
